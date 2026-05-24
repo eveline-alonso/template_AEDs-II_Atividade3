@@ -14,7 +14,7 @@ public class App {
     /** Scanner para leitura de dados do teclado */
     static Scanner teclado;
 
-    /** Quantidade de produtos cadastrados atualmente na lista */
+    /** Quantidade de produtos cadastrados atualmente no vetor */
     static int quantosProdutos = 0;
 
     static ABB<String, Produto> produtosCadastradosPorNome;
@@ -37,7 +37,7 @@ public class App {
         System.out.println("AEDs II COMÉRCIO DE COISINHAS");
         System.out.println("=============================");
     }
-   
+    
     static <T extends Number> T lerOpcao(String mensagem, Class<T> classe) {
         
     	T valor;
@@ -52,24 +52,27 @@ public class App {
         return valor;
     }
     
-    /** Imprime o menu principal, lê a opção do usuário e a retorna (int).
+    /** 
+     * Imprime o menu principal, lê a opção do usuário e a retorna (int).
      * @return Um inteiro com a opção do usuário.
     */
     static int menu() {
         cabecalho();
         System.out.println("1 - Listar todos os produtos");
-        System.out.println("2 - Carregar produtos por nome/descrição");
-        System.out.println("3 - Carregar produtos por id");
-        System.out.println("4 - Procurar produto, por nome");
-        System.out.println("5 - Procurar produto, por id");
-        System.out.println("0 - Sair");
-        System.out.print("Digite sua opção: ");
-        return Integer.parseInt(teclado.nextLine());
+        System.out.println("2 - Procurar produto, por nome");
+        System.out.println("3 - Procurar produto, por id");
+        System.out.println("4 - Remover produto, por nome");
+        System.out.println("5 - Remover produto, por id");
+        System.out.println("6 - Recortar a lista de produtos, por nome");
+        System.out.println("7 - Recortar a lista de produtos, por id");
+        System.out.println("0 - Finalizar");
+        
+        return lerOpcao("Digite sua opção: ", Integer.class);
     }
     
     /**
-     * Lê os dados de um arquivo-texto e retorna uma árvore de produtos. Arquivo-texto no formato
-     * N (quantidade de produtos) <br/>
+     * Lê os dados de um arquivo-texto e retorna uma ávore de produtos. Arquivo-texto no formato
+     * N  (quantidade de produtos) <br/>
      * tipo;descrição;preçoDeCusto;margemDeLucro;[dataDeValidade] <br/>
      * Deve haver uma linha para cada um dos produtos. Retorna uma árvore vazia em caso de problemas com o arquivo.
      * @param nomeArquivoDados Nome do arquivo de dados a ser aberto.
@@ -82,7 +85,6 @@ public class App {
     	String linha;
     	Produto produto;
     	ABB<K, Produto> produtosCadastrados;
-    	K chave;
     	
     	try {
     		arquivo = new Scanner(new File(nomeArquivoDados), Charset.forName("UTF-8"));
@@ -93,7 +95,7 @@ public class App {
     		for (int i = 0; i < numProdutos; i++) {
     			linha = arquivo.nextLine();
     			produto = Produto.criarDoTexto(linha);
-    			chave = extratorDeChave.apply(produto);
+    			K chave = extratorDeChave.apply(produto);
     			produtosCadastrados.inserir(chave, produto);
     		}
     		quantosProdutos = numProdutos;
@@ -109,29 +111,15 @@ public class App {
     
     static <K> Produto localizarProduto(ABB<K, Produto> produtosCadastrados, K procurado) {
     	
-    	Produto produto;
-    	
-    	cabecalho();
-    	System.out.println("Localizando um produto...");
-    	
-    	try {
-    		produto = produtosCadastrados.pesquisar(procurado);
-    	} catch (NoSuchElementException excecao) {
-    		produto = null;
-    	}
-    	
-    	System.out.println("Número de comparações realizadas: " + produtosCadastrados.getComparacoes());
-    	System.out.println("Tempo de processamento da pesquisa: " + produtosCadastrados.getTempo() + " ms");
-        
-    	return produto;
-    	
+    	// TODO
+    	return null;
     }
     
     /** Localiza um produto na árvore de produtos organizados por id, a partir do código de produto informado pelo usuário, e o retorna. 
      *  Em caso de não encontrar o produto, retorna null */
     static Produto localizarProdutoID(ABB<Integer, Produto> produtosCadastrados) {
         
-        // TODO
+        //TODO
     	return null;
     }
     
@@ -139,22 +127,22 @@ public class App {
      *  A busca não é sensível ao caso. Em caso de não encontrar o produto, retorna null */
     static Produto localizarProdutoNome(ABB<String, Produto> produtosCadastrados) {
         
-    	// TODO
+    	//TODO
     	return null;
     }
     
     private static void mostrarProduto(Produto produto) {
     	
         cabecalho();
-        String mensagem = "Dados inválidos para o produto!";
+        StringBuilder  mensagem = new StringBuilder("Produto não encontrado.\n");
         
-        if (produto != null){
-            mensagem = String.format("Dados do produto:\n%s", produto);
+        if (produto != null) {
+            mensagem = new StringBuilder(String.format("%s\n", produto));            
         }
-        
-        System.out.println(mensagem);
+
+        System.out.println(mensagem.toString());
     }
-    
+
     /** Lista todos os produtos cadastrados, numerados, um por linha */
     static <K> void listarTodosOsProdutos(ABB<K, Produto> produtosCadastrados) {
     	
@@ -163,23 +151,59 @@ public class App {
         System.out.println(produtosCadastrados.toString());
     }
     
-	public static void main(String[] args) {
+    /** Localiza e remove um produto da árvore de produtos organizados por id, a partir do código de produto informado pelo usuário, e o retorna. 
+     *  Em caso de não encontrar o produto, retorna null */
+    static Produto removerProdutoId(ABB<Integer, Produto> produtosCadastrados) {
+    	//TODO
+    	return null;
+    }
+
+     /** Localiza e remove um produto na árvore de produtos organizados por nome, a partir do nome de produto informado pelo usuário, e o retorna. 
+      *  A busca não é sensível ao caso. Em caso de não encontrar o produto, retorna null */
+    static Produto removerProdutoNome(ABB<String, Produto> produtosCadastrados) {
+    	//TODO
+    	return null;
+    }
+
+    static <K> Produto removerProduto(ABB<K, Produto> produtosCadastrados, K chave){
+    	//TODO
+    	return null;
+    }
+    
+    private static <K> void recortarProduto(ABB<K, Produto> produtosCadastrados, K deOnde, K ateOnde) {
+    	//TODO
+    }
+    
+    private static void recortarProdutosNome(ABB<String, Produto> produtosCadastrados) {
+    	//TODO
+    }
+     
+    private static void recortarProdutosId(ABB<Integer, Produto> produtosCadastrados) {
+    	//TODO
+    }
+    
+    public static void main(String[] args) {
 		teclado = new Scanner(System.in, Charset.forName("UTF-8"));
         nomeArquivoDados = "produtos.txt";
+        produtosCadastradosPorNome = lerProdutos(nomeArquivoDados, (p -> p.descricao));
+        produtosCadastradosPorId = new ABB<Integer, Produto>(produtosCadastradosPorNome, (p -> p.idProduto));
         
         int opcao = -1;
       
         do{
-            opcao = menu();
+        	opcao = menu();
             switch (opcao) {
-                case 1 -> listarTodosOsProdutos(produtosCadastradosPorNome);
-                case 2 -> produtosCadastradosPorNome = lerProdutos(nomeArquivoDados, (p -> p.descricao));
-                case 3 -> produtosCadastradosPorId = lerProdutos(nomeArquivoDados, (p -> p.idProduto));
-                case 4 -> mostrarProduto(localizarProdutoNome(produtosCadastradosPorNome));
-                case 5 -> mostrarProduto(localizarProdutoID(produtosCadastradosPorId));
+            case 1 -> listarTodosOsProdutos(produtosCadastradosPorNome);
+            case 2 -> mostrarProduto(localizarProdutoNome(produtosCadastradosPorNome));
+            case 3 -> mostrarProduto(localizarProdutoID(produtosCadastradosPorId));
+            case 4 -> mostrarProduto(removerProdutoNome(produtosCadastradosPorNome));
+        	case 5 -> mostrarProduto(removerProdutoId(produtosCadastradosPorId));
+        	case 6 -> recortarProdutosNome(produtosCadastradosPorNome); 
+        	case 7 -> recortarProdutosId(produtosCadastradosPorId); 
+            case 0 -> System.out.println("FLW VLW OBG VLT SMP.");
             }
             pausa();
-        }while(opcao != 0);       
+        } while (opcao != 0);       
 
         teclado.close();    
     }

@@ -45,15 +45,17 @@ public class ABB<K, V> implements IMapeamento<K, V>{
 
     /**
      * Construtor da classe.
-     * Esse construtor cria uma nova árvore binária a partir de uma outra árvore binária de busca,
+     * Esse construtor cria uma nova árvore binária de busca a partir de uma outra árvore binária de busca,
      * com os mesmos itens, mas usando uma nova chave.
      * @param original a árvore binária de busca original.
      * @param funcaoChave a função que irá extrair a nova chave de cada item para a nova árvore.
      */
-    public ABB(ABB<?, V> original, Function<V, K> funcaoChave) {
+    @SuppressWarnings("unchecked")
+	public ABB(ABB<?, V> original, Function<V, K> funcaoChave) {
         ABB<K, V> nova = new ABB<>();
         nova = copiarArvore(original.raiz, funcaoChave, nova);
         this.raiz = nova.raiz;
+        this.comparador = (Comparator<K>) Comparator.naturalOrder();
     }
     
     /**
@@ -133,9 +135,8 @@ public class ABB<K, V> implements IMapeamento<K, V>{
      * @return o tamanho atualizado da árvore após a execução da operação de inserção.
      */
     public int inserir(K chave, V item) {
-    	
     	// TODO
-        return tamanho;
+    	return tamanho;
     }
 
     @Override 
@@ -145,11 +146,6 @@ public class ABB<K, V> implements IMapeamento<K, V>{
 
     @Override
     public String percorrer() {
-    	return caminhamentoEmOrdem();
-    }
-
-    public String caminhamentoEmOrdem() {
-    	
     	// TODO
     	return null;
     }
@@ -161,10 +157,16 @@ public class ABB<K, V> implements IMapeamento<K, V>{
      * @return o valor associado ao item removido.
      */
     public V remover(K chave) {
-    	
     	// TODO
     	return null;
     }
+
+    
+    public Lista<V> recortar(K chaveDeOnde, K chaveAteOnde) {
+		
+    	// TODO
+		return null;
+	}
 
 	@Override
 	public int tamanho() {
